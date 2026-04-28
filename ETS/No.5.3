@@ -1,0 +1,59 @@
+#include <iostream>
+using namespace std;
+
+#define MAX 10
+
+string queue[MAX];
+int front = -1, rear = -1;
+
+bool isEmpty() {
+    return front == -1;
+}
+
+bool isFull() {
+    return rear == MAX - 1;
+}
+
+void enqueue(string nama) {
+    if (isFull()) {
+        cout << "Queue penuh\n";
+        return;
+    }
+    if (isEmpty()) front = 0;
+    queue[++rear] = nama;
+}
+
+void dequeue() {
+    if (isEmpty()) {
+        cout << "Queue kosong\n";
+        return;
+    }
+    cout << "Dilayani: " << queue[front] << endl;
+    front++;
+    if (front > rear) front = rear = -1;
+}
+
+void tampil() {
+    if (isEmpty()) {
+        cout << "Queue kosong\n";
+        return;
+    }
+    for (int i = front; i <= rear; i++) {
+        cout << queue[i] << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    enqueue("A");
+    enqueue("B");
+    enqueue("C");
+
+    dequeue();
+
+    enqueue("D");
+
+    tampil();
+
+    return 0;
+}
