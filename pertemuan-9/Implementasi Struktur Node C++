@@ -1,0 +1,8 @@
+class Node {
+public:
+string name;
+vector<Node*> children;
+Node(string n) {
+name = n;
+}
+};
