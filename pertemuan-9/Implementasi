@@ -1,0 +1,11 @@
+void preorder(Node* node) {
+if(node == NULL)
+return;
+
+9
+
+cout << node->name << endl;
+for(Node* child : node->children) {
+preorder(child);
+}
+}
