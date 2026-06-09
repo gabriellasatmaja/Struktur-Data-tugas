@@ -1,0 +1,33 @@
+#include 
+
+#define USERS 4
+
+char *names[] = {"Andi", "Budi", "Citra", "Dina"};
+
+int main() {
+    int friendship[USERS][USERS] = {
+        {0,1,1,0}, // Andi
+        {1,0,0,1}, // Budi
+        {1,0,0,1}, // Citra
+        {0,1,1,0}  // Dina
+    };
+
+    int user = 0; // Andi
+
+    printf("Rekomendasi teman untuk %s:\n", names[user]);
+
+    for (int i = 0; i < USERS; i++) {
+        if (friendship[user][i]) { // teman langsung
+            for (int j = 0; j < USERS; j++) {
+                if (friendship[i][j] &&
+                    j != user &&
+                    !friendship[user][j]) {
+
+                    printf("- %s\n", names[j]);
+                }
+            }
+        }
+    }
+
+    return 0;
+}
