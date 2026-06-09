@@ -1,0 +1,133 @@
+#include 
+#include 
+using namespace std;
+
+//1. STRUKTUR NODE AVL TREE
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+    int height;
+
+    Node(int value) {
+        data = value;
+        left = nullptr;
+        right = nullptr;
+        height = 1; // Node baru awalnya memiliki tinggi 1
+    }
+};
+
+//2. FUNGSI PENDUKUNG UTITAS
+// Fungsi untuk mendapatkan tinggi (height) sebuah node
+int height(Node* node) {
+    if (node == nullptr) return 0;
+    return node->height;
+}
+
+// Fungsi untuk mendapatkan Balance Factor (BF) dari sebuah node
+int getBalance(Node* node) {
+    if (node == nullptr) return 0;
+    return height(node->left) - height(node->right);
+}
+
+//3. FUNGSI OPERASI ROTASI
+//Fungsi Rotasi Kanan (digunakan untuk kasus Left-Left / LL)
+Node* rightRotate(Node* y) {
+    Node* x = y->left;
+    Node* T2 = x->right;
+
+    // Proses Rotasi
+    x->right = y;
+    y->left = T2;
+
+    // Perbarui tinggi node yang berubah
+    y->height = max(height(y->left), height(y->right)) + 1;
+    x->height = max(height(x->left), height(x->right)) + 1;
+
+    return x; // Node x menjadi root baru
+}
+
+//Fungsi Rotasi Kiri (digunakan untuk kasus Right-Right)
+Node* leftRotate(Node* x) {
+    Node* y = x->right;
+    Node* T2 = y->left;
+
+    //Proses Rotasi
+    y->left = x;
+    x->right = T2;
+
+    //Perbarui tinggi node yang berubah
+    x->height = max(height(x->left), height(x->right)) + 1;
+    y->height = max(height(y->left), height(y->right)) + 1;
+
+    return y; //Node y menjadi root baru
+}
+
+//4. FUNGSI INSERT LENGKAP DENGAN ROTASI otomatis
+Node* insert(Node* node, int data) {
+    //A: Lakukan enkapsulasi data seperti BST biasa
+    if (node == nullptr) return new Node(data);
+
+    if (data < node->data)
+        node->left = insert(node->left, data);
+    else if (data > node->data)
+        node->right = insert(node->right, data);
+    else
+        return node; // Data duplikat tidak diperbolehkan dalam BST
+
+    //B: Perbarui tinggi dari node leluhur ini
+    node->height = 1 + max(height(node->left), height(node->right));
+
+    //Langkah C: Ambil Balance Factor untuk memeriksa keseimbangan
+    int balance = getBalance(node);
+
+    //Jika tidak seimbang, tangani dengan 4 kasus rotasi:
+
+    //Kasus Left Left
+    if (balance > 1 && data < node->left->data)
+        return rightRotate(node);
+
+    //Kasus Right Right
+    if (balance < -1 && data > node->right->data)
+        return leftRotate(node);
+
+    //Kasus Left Right
+    if (balance > 1 && data > node->left->data) {
+        node->left = leftRotate(node->left);
+        return rightRotate(node);
+    }
+
+    //Kasus Right Left
+    if (balance < -1 && data < node->right->data) {
+        node->right = rightRotate(node->right);
+        return leftRotate(node);
+    }
+
+    return node;
+}
+
+//Fungsi pembantu untuk mencetak pohon secara Pre-Order (Root, Left, Right)
+void preOrder(Node* root) {
+    if (root != nullptr) {
+        cout << root->data << " ";
+        preOrder(root->left);
+        preOrder(root->right);
+    }
+}
+
+int main() {
+    Node* root = nullptr;
+
+    //Contoh memasukkan data sesuai simulasi slide PPT: 10, 20, 30, 40, 50
+    root = insert(root, 10);
+    root = insert(root, 20);
+    root = insert(root, 30);
+    root = insert(root, 40);
+    root = insert(root, 50);
+
+    cout << "Hasil cetak Pre-Order dari AVL Tree yang sudah seimbang: " << endl;
+    preOrder(root);
+    cout << endl;
+
+    return 0;
+}
