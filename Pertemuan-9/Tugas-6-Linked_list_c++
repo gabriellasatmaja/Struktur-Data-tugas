@@ -1,0 +1,117 @@
+#include <iostream>
+
+using namespace std;
+
+
+struct Node{
+
+    int data;
+
+    Node* next;
+
+};
+
+
+
+void insertAtBeginning(Node* &head, int value){
+
+    Node* newNode = new Node();
+
+
+    newNode->data = value;
+
+
+    newNode->next = head;
+
+
+    head = newNode;
+
+}
+
+
+
+void traverse(Node* head){
+
+    Node* current = head;
+
+
+    while(current != NULL){
+
+        cout << current->data << " ";
+
+        current = current->next;
+
+    }
+
+}
+
+
+
+bool search(Node* head, int key){
+
+    Node* current = head;
+
+
+    while(current != NULL){
+
+
+        if(current->data == key)
+
+            return true;
+
+
+
+        current = current->next;
+
+    }
+
+
+    return false;
+
+}
+
+
+
+int main(){
+
+
+    Node* head = NULL;
+
+
+
+    insertAtBeginning(head,30);
+
+    insertAtBeginning(head,20);
+
+    insertAtBeginning(head,10);
+
+
+
+    cout<<"Linked List : ";
+
+    traverse(head);
+
+
+
+    cout<<endl;
+
+
+
+    int key = 20;
+
+
+
+    if(search(head,key))
+
+        cout<<"Data ditemukan";
+
+
+    else
+
+        cout<<"Data tidak ditemukan";
+
+
+
+    return 0;
+
+}
